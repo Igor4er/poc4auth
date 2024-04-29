@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>by ihorcher</title>
+    <link rel="stylesheet" href="/static/base.css">
+    <style>
+        .b {
+            border: 1px solid #eee;
+            padding: 1.25% 1% 1.25% 1%;
+        }
+        .mt {
+            margin-top: 1rem;
+        }
+        .fp {
+            padding: 0.45rem;
+        }
+        h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>POC4Email</h1>
+
+    <div class="b">
+        <h2>Введіть свій Email</h2>
+        <input type="email" name="email" id="email" placeholder="Email" class="fp"><br>
+        <input type="submit" id="email_submit" class="mt fp" title="Відправити" onclick="do_ws_cycle();">
+
+        <h2 class="e" id="err"></h2>
+        <h2 class="s" id="suc"></h2>
+        <h2 class="i" id="inf"></h2>
+    </div>
+</body>
+<script>
+    let btn = document.getElementById("email_submit");
+    let err = document.getElementById("err");
+    let suc = document.getElementById("suc");
+    let inf = document.getElementById("inf");
+
+    function do_ws_cycle() {
+        btn.disabled = true;
+        err.innerText = "";
+        suc.innerText = "";
+        inf.innerText = "";
+        let socket = new WebSocket("{{ url_for('ws_handle_email') }}");
+        socket.onopen = function (e) {
+            let email = document.getElementById("email").value;
+            socket.send(email);
+        }
+        socket.onclose = function (e) {
+            btn.disabled = false;
+        }
+        socket.onmessage = function (e) {
+            let data = e.data;
+            if (data === "success") {
+                suc.innerText = "Успішно підтверджено!";
+                inf.innerText = ""
+                err.innerText = ""
+            }
+            if (data === "failed") {
+                err.innerText = "Помилка відправки листа!";
+            }
+            if (data === "await") {
+                inf.innerText = "Лист з підтвердженням відправлено на вашу скриньку."
+            }
+        }
+        socket.onerror = function(error) {
+            btn.disabled = true;
+            alert(`[error]`);
+        };
+    }
+</script>
+</html>

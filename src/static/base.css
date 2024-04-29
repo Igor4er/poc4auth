@@ -1,0 +1,41 @@
+body {
+    background-color: #222222;
+    color: #eeeeee;
+    letter-spacing: 0.35px;
+}
+
+a {
+    color: #CFCFCF;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #B6B6B6;
+    text-decoration: underline;
+}
+
+button {
+    height: 3vh;
+    width: 75px;
+    text-align: center;
+}
+
+.e {
+    color: #dd4646;
+}
+
+.s {
+    color: #67dd46;
+}
+
+.a {
+    color: #dddb46;
+}
+
+.i {
+    color: #46c1dd;
+}
+
+.dn {
+    display: none;
+}

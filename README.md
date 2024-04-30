@@ -8,7 +8,7 @@
 
 ## How to run
 0. Prerequisites
-- Resend API token
+- [Resend](https://resend.com/home) API token
 - Python 3
 
 1. Clone project
@@ -44,6 +44,5 @@ python ./src/main.py
 ```
 
 6. Open the following url in your browser
-```
-http://localhost:8000/
-```
+[http://localhost:8000/](http://127.0.0.1:8000/)
+

@@ -19,7 +19,7 @@
     let cls = document.getElementById("cls");
 
     function close_self_t() {
-        cls.innerText = "Цю сторінку буде автоматично закрито.";
+        cls.innerText = "This page will be automatically closed.";
         window.setTimeout(() => { window.close() }, 3000);
     }
 
@@ -40,7 +40,7 @@
             }
         })
         .catch(function (error) {
-            let err_text = "Виникла невідома помилка! (" + error.status + ")";
+            let err_text = "An unknown error has occurred! (" + error.status + ")";
             err.innerText = err_text;
         })
     }
@@ -48,7 +48,7 @@
 
     let token = "{{token}}";
     if (token === "" || token.length <= 30) {
-        err.innerText = "Помилка! Потрібно вказати токен."
+        err.innerText = "Error! You need to specify a token.";
     }
     else {
         do_request(token);

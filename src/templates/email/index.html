@@ -56,7 +56,7 @@
         }
         socket.onclose = function (e) {
             if (in_progress) {
-                err.innerText = "З'єднання з сервером обірвано!"
+                err.innerText = "Connection to the server has been interrupted!";
             }
             else if (!success) {
                btn.disabled = false; 
@@ -67,16 +67,16 @@
             if (data === "success") {
                 success = true;
                 in_progress = false;
-                suc.innerText = "Успішно підтверджено!";
+                suc.innerText = "Successfully confirmed!";
                 inf.innerText = ""
                 err.innerText = ""
             }
             if (data === "failed") {
-                err.innerText = "Помилка відправки листа!";
+                err.innerText = "Error sending email!";
                 in_progress = false;
             }
             if (data === "await") {
-                inf.innerText = "Лист з підтвердженням відправлено на вашу скриньку."
+                inf.innerText = "Confirmation email has been sent to your inbox."
             }
         }
         socket.onerror = function(error) {

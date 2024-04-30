@@ -29,7 +29,7 @@ async def send_confirmation_email_to(request: Request, email: str) -> bool:
     params = {
         "from": CONFIG.FROM_MAIL,
         "to": [email],
-        "subject": "Підтвердження від POC4Auth",
+        "subject": "Confirmation from POC4Auth",
         "html": html
     }
     try:
@@ -79,14 +79,14 @@ async def confirm_email(request: Request, token: str):
     try:
         tok = jwt.decode(token, key=CONFIG.JWT_SECRET.get_secret_value(), algorithms=["HS256"])
     except Exception as E:
-        return JSONResponse(status_code=status.HTTP_408_REQUEST_TIMEOUT, content={"msg": "Email не було підтверджено. Час дії токена вийшов."})
+        return JSONResponse(statuscode=status.HTTP_408_REQUEST_TIMEOUT, content={"msg": "Email was not confirmed. The token has expired."})
     email = tok["email"]
     ws = ACTIVE_SOCKETS.get(email, None)
     if ws is None:
-        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"msg": "Email не було підтверджено. Не покидайте сторінку на якій ви вводили email."})
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"msg": "Email was not confirmed. Do not leave the page where you entered the email."})
     await ws.send_text("success")
     CONFIRMED_EMAILS.append(email)
-    return {"msg": "Успішно!"}
+    return {"msg": "Success!"}
 
 @router.get("/confirm")
 async def confirm_email_page(request: Request, token: str = ""):

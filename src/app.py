@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from config import CONFIG
-from routers import email
+from routers import email, index
 from fastapi.staticfiles import StaticFiles
 
 
@@ -19,4 +19,4 @@ app.add_middleware(
 )
 
 app.include_router(email.router)
-
+app.include_router(index.router)

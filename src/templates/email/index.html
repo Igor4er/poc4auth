@@ -41,27 +41,39 @@
     let inf = document.getElementById("inf");
 
     function do_ws_cycle() {
+        let in_progress = true;
+        let success = false;
+
         btn.disabled = true;
         err.innerText = "";
         suc.innerText = "";
         inf.innerText = "";
+
         let socket = new WebSocket("{{ url_for('ws_handle_email') }}");
         socket.onopen = function (e) {
             let email = document.getElementById("email").value;
             socket.send(email);
         }
         socket.onclose = function (e) {
-            btn.disabled = false;
+            if (in_progress) {
+                err.innerText = "З'єднання з сервером обірвано!"
+            }
+            else if (!success) {
+               btn.disabled = false; 
+            }
         }
         socket.onmessage = function (e) {
             let data = e.data;
             if (data === "success") {
+                success = true;
+                in_progress = false;
                 suc.innerText = "Успішно підтверджено!";
                 inf.innerText = ""
                 err.innerText = ""
             }
             if (data === "failed") {
                 err.innerText = "Помилка відправки листа!";
+                in_progress = false;
             }
             if (data === "await") {
                 inf.innerText = "Лист з підтвердженням відправлено на вашу скриньку."

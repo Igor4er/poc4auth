@@ -23,29 +23,35 @@
         window.setTimeout(() => { window.close() }, 3000);
     }
 
+    function do_request(token) {
+        let url = "{{ url_for('confirm_email') }}" + "?token=" + token;
+        axios.get(url, {
+            validateStatus: function (status) {
+                return status === 200 || status === 408 || status === 401;
+            }
+        })
+        .then(function (response) {
+            if (response.status === 200) {
+                suc.innerText = response.data.msg;
+                close_self_t();
+            }
+            else {
+                err.innerText = response.data.msg;
+            }
+        })
+        .catch(function (error) {
+            let err_text = "Виникла невідома помилка! (" + error.status + ")";
+            err.innerText = err_text;
+        })
+    }
+
 
     let token = "{{token}}";
-    if (token === "NOTOKEN") {
+    if (token === "" || token.length <= 30) {
         err.innerText = "Помилка! Потрібно вказати токен."
     }
-    let url = "{{ url_for('confirm_email') }}" + "?token=" + token;
-    axios.get(url, {
-        validateStatus: function (status) {
-            return status === 200 || status === 408;
-        }
-    })
-    .then(function (response) {
-        if (response.status === 200) {
-            suc.innerText = response.data.msg;
-        }
-        else {
-            err.innerText = response.data.msg;
-        }
-        close_self_t()
-    })
-    .catch(function (error) {
-        let err_text = "Виникла невідома помилка! (" + error.status + ")";
-        err.innerText = err_text;
-    })
+    else {
+        do_request(token);
+    }
 </script>
 </html>

@@ -79,7 +79,7 @@ async def confirm_email(request: Request, token: str):
     try:
         tok = jwt.decode(token, key=CONFIG.JWT_SECRET.get_secret_value(), algorithms=["HS256"])
     except Exception as E:
-        return JSONResponse(statuscode=status.HTTP_408_REQUEST_TIMEOUT, content={"msg": "Email was not confirmed. The token has expired."})
+        return JSONResponse(status_code=status.HTTP_408_REQUEST_TIMEOUT, content={"msg": "Email was not confirmed. The token has expired."})
     email = tok["email"]
     ws = ACTIVE_SOCKETS.get(email, None)
     if ws is None:
